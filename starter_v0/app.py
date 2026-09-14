@@ -269,7 +269,9 @@ def main() -> None:
     with st.sidebar:
         st.divider()
         st.caption(f"Artifact version: {artifact_version.artifact_version}")
+        st.caption("Prompt SHA-256")
         st.code(artifact_version.prompt_hash, language=None)
+        st.caption("Tools SHA-256")
         st.code(artifact_version.tools_hash, language=None)
         st.caption(f"Transcript: {st.session_state['transcript_path']}")
 
