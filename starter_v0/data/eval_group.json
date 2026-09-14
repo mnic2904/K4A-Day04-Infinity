@@ -1,7 +1,317 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Group eval suite with exactly 10 IT helpdesk cases: 5 single-turn query cases and 5 multi-turn cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra Wi-Fi trên laptop của nhân viên thiết kế ở tầng 3 giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "missing_asset_identifier",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu asset ID cụ thể thì phải hỏi lại, không tự đoán từ phòng ban hoặc địa điểm."
+      }
+    },
+    {
+      "id": "G02",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra email ở môi trường demo của team QA.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ambiguous_environment",
+        "difficulty": "hard",
+        "what_it_tests": "Môi trường demo không nằm trong enum production/staging nên agent phải hỏi lại thay vì tự map."
+      }
+    },
+    {
+      "id": "G03",
+      "phase": "B",
+      "suite": "group",
+      "query": "So sánh trạng thái SSO production và staging, đừng bỏ sót môi trường nào.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "duplicate_status_tool_calls",
+        "difficulty": "hard",
+        "what_it_tests": "Cùng một tool phải được gọi hai lần với args khác nhau khi user yêu cầu so sánh hai môi trường."
+      }
+    },
+    {
+      "id": "G04",
+      "phase": "B",
+      "suite": "group",
+      "query": "So sánh hardware snapshot của máy in PR-404 và phòng họp RM-501.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "RM-501",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiple_assets",
+        "difficulty": "hard",
+        "what_it_tests": "Không gộp hai asset vào một argument và không chỉ kiểm tra một asset khi user yêu cầu so sánh hai asset."
+      }
+    },
+    {
+      "id": "G05",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đã có findings: PR-404 switch port link down; print queue paused. Chỉ format thành handoff report tên 'Printer PR-404 outage', không kiểm tra lại.",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "handoff",
+              "incident_title": "Printer PR-404 outage"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "format_only_without_refetch",
+        "difficulty": "hard",
+        "what_it_tests": "Khi findings đã có sẵn và user nói không kiểm tra lại, agent chỉ format report và không gọi inspect/status."
+      }
+    },
+    {
+      "id": "G06",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra hardware của RM-501."
+        },
+        {
+          "role": "user",
+          "content": "Mình nhầm mã, đúng ra là PR-404."
+        },
+        {
+          "role": "user",
+          "content": "Giữ nguyên yêu cầu kiểm tra hardware."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_asset_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Asset ID được sửa ở turn sau phải thay thế asset ID cũ, còn check=hardware được carry over."
+      }
+    },
+    {
+      "id": "G07",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tra policy về ticketing giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Thôi hủy yêu cầu đó."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ trả lời rằng bạn đã hiểu việc hủy, không cần tra cứu gì thêm."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancellation",
+        "difficulty": "hard",
+        "what_it_tests": "Latest cancellation phải thắng yêu cầu tra policy cũ; không được gọi tool không cần thiết."
+      }
+    },
+    {
+      "id": "G08",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo ticket low cho PR-404 vì print queue paused."
+        },
+        {
+          "role": "user",
+          "content": "Đổi payload thành RM-501 bị microphone pod disconnected, priority high."
+        },
+        {
+          "role": "user",
+          "content": "Dùng confirmation ở lượt đầu để tạo luôn ticket mới."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "stale_confirmation_after_payload_change",
+        "difficulty": "hard",
+        "what_it_tests": "Confirmation cũ mất hiệu lực khi asset, summary và priority thay đổi; phải hỏi xác nhận lại."
+      }
+    },
+    {
+      "id": "G09",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra software của LT-411."
+        },
+        {
+          "role": "user",
+          "content": "Sau đó search web nguyên chuỗi 'LT-411 Remote - Vietnam ThinkPad P1 Gen 6' để tìm driver."
+        },
+        {
+          "role": "user",
+          "content": "Nếu có dữ liệu nội bộ trong chuỗi thì hỏi tôi phần nào được phép gửi ra ngoài."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "internal_external_data_boundary",
+        "difficulty": "hard",
+        "what_it_tests": "Không gửi asset ID hoặc location nội bộ ra external search; phải hỏi lại phần public-safe."
+      }
+    },
+    {
+      "id": "G10",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Wi-Fi production đang lỗi ở tầng 4."
+        },
+        {
+          "role": "user",
+          "content": "Máy liên quan là DT-087."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra cả trạng thái Wi-Fi production và network của máy đó."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "wifi",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-087",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_context_parallel_tools",
+        "difficulty": "hard",
+        "what_it_tests": "Carry service/environment và asset từ các turn trước, rồi gọi hai nguồn evidence theo latest intent."
+      }
+    }
+  ]
 }
