@@ -1,0 +1,857 @@
+{
+  "run_id": "v3_B_group_openai_20260914T202629701356",
+  "version": "v3",
+  "artifact_version": "v3+pafd69decbd3d+t307d90031be2",
+  "prompt_hash": "afd69decbd3d6181c1ffa0a01d2615eecb7bdc9f61b5e06dc2a521db301fe970",
+  "tools_hash": "307d90031be2dc44e8a151b7d6b540a7fff18d0fa80087faccd49eeb142f0693",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\Projects\\K4A-Day04-Infinity\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\Projects\\K4A-Day04-Infinity\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "Group eval suite with exactly 10 IT helpdesk cases: 5 single-turn query cases and 5 multi-turn cases.",
+  "generated_at": "2026-09-14T20:26:29",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 8,
+    "case_accuracy": 0.8,
+    "tool_routing_accuracy": 0.8,
+    "argument_accuracy": 0.8,
+    "multiturn_accuracy": 0.6,
+    "failure_counts": {
+      "wrong_boundary": 1,
+      "wrong_tool": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "missing_asset_identifier",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu asset ID cụ thể thì phải hỏi lại, không tự đoán từ phòng ban hoặc địa điểm."
+      },
+      "input": "Kiểm tra Wi-Fi trên laptop của nhân viên thiết kế ở tầng 3 giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp mã nhân viên hoặc mã tài sản của laptop không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp mã nhân viên hoặc mã tài sản của laptop không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có thể cung cấp mã nhân viên hoặc mã tài sản của laptop không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "ambiguous_environment",
+        "difficulty": "hard",
+        "what_it_tests": "Môi trường demo không nằm trong enum production/staging nên agent phải hỏi lại thay vì tự map."
+      },
+      "input": "Kiểm tra email ở môi trường demo của team QA.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn kiểm tra trạng thái email trong môi trường production hay staging?",
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn kiểm tra trạng thái email trong môi trường production hay staging?",
+            "response_type": "choice",
+            "options": [
+              "production",
+              "staging"
+            ]
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có muốn kiểm tra trạng thái email trong môi trường production hay staging?",
+            "response_type": "choice",
+            "options": [
+              "production",
+              "staging"
+            ],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "duplicate_status_tool_calls",
+        "difficulty": "hard",
+        "what_it_tests": "Cùng một tool phải được gọi hai lần với args khác nhau khi user yêu cầu so sánh hai môi trường."
+      },
+      "input": "So sánh trạng thái SSO production và staging, đừng bỏ sót môi trường nào.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "sso",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "sso",
+            "environment": "production",
+            "status": "operational",
+            "incident": null,
+            "incident_id": null,
+            "affected_locations": [],
+            "started_at": null,
+            "last_updated": "2026-09-14T08:57:00+07:00",
+            "workaround": null,
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "sso",
+            "environment": "staging"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "sso",
+            "environment": "staging",
+            "status": "operational",
+            "incident": null,
+            "incident_id": null,
+            "affected_locations": [],
+            "started_at": null,
+            "last_updated": "2026-09-14T08:44:00+07:00",
+            "workaround": null,
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "multiple_assets",
+        "difficulty": "hard",
+        "what_it_tests": "Không gộp hai asset vào một argument và không chỉ kiểm tra một asset khi user yêu cầu so sánh hai asset."
+      },
+      "input": "So sánh hardware snapshot của máy in PR-404 và phòng họp RM-501.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "RM-501",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "RM-501",
+              "check": "hardware"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "PR-404",
+            "check": "hardware"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "PR-404",
+            "check": "hardware",
+            "device": {
+              "asset_id": "PR-404",
+              "manufacturer": "HP",
+              "type": "printer",
+              "model": "Color LaserJet Enterprise M555dn",
+              "os": "FutureSmart 5.7",
+              "assigned_to": null,
+              "location": "Bangkok floor 4",
+              "purchase_date": "2023-08-14",
+              "warranty_until": "2026-08-13"
+            },
+            "diagnostics": {
+              "hardware": "paper tray 2 sensor warning; toner levels above 40%"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "RM-501",
+            "check": "hardware"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "RM-501",
+            "check": "hardware",
+            "device": {
+              "asset_id": "RM-501",
+              "manufacturer": "Logitech",
+              "type": "meeting_room",
+              "model": "Rally Bar",
+              "os": "CollabOS 1.13",
+              "assigned_to": null,
+              "location": "Bangkok room BKK-501",
+              "purchase_date": "2024-09-01",
+              "warranty_until": "2027-08-31"
+            },
+            "diagnostics": {
+              "hardware": "camera healthy; right microphone pod disconnected"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "format_only_without_refetch",
+        "difficulty": "hard",
+        "what_it_tests": "Khi findings đã có sẵn và user nói không kiểm tra lại, agent chỉ format report và không gọi inspect/status."
+      },
+      "input": "Đã có findings: PR-404 switch port link down; print queue paused. Chỉ format thành handoff report tên 'Printer PR-404 outage', không kiểm tra lại.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "handoff",
+              "incident_title": "Printer PR-404 outage"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "findings": [
+                {
+                  "label": "Switch Port Status",
+                  "detail": "Link Down",
+                  "source": "inspect_device",
+                  "status": "down"
+                },
+                {
+                  "label": "Print Queue Status",
+                  "detail": "Paused",
+                  "source": "inspect_device",
+                  "status": "paused"
+                }
+              ],
+              "template": "handoff",
+              "incident_title": "Printer PR-404 outage"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "format_incident_report",
+          "args": {
+            "findings": [
+              {
+                "label": "Switch Port Status",
+                "detail": "Link Down",
+                "source": "inspect_device",
+                "status": "down"
+              },
+              {
+                "label": "Print Queue Status",
+                "detail": "Paused",
+                "source": "inspect_device",
+                "status": "paused"
+              }
+            ],
+            "template": "handoff",
+            "incident_title": "Printer PR-404 outage"
+          },
+          "result": {
+            "tool": "format_incident_report",
+            "template": "handoff",
+            "markdown": "# Handoff: Printer PR-404 outage\n\n- **Switch Port Status:** Link Down\n- **Print Queue Status:** Paused\n\n- Owner: unassigned\n- Status: needs review",
+            "finding_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_asset_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Asset ID được sửa ở turn sau phải thay thế asset ID cũ, còn check=hardware được carry over."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra hardware của RM-501."
+        },
+        {
+          "role": "user",
+          "content": "Mình nhầm mã, đúng ra là PR-404."
+        },
+        {
+          "role": "user",
+          "content": "Giữ nguyên yêu cầu kiểm tra hardware."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "PR-404",
+            "check": "hardware"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "PR-404",
+            "check": "hardware",
+            "device": {
+              "asset_id": "PR-404",
+              "manufacturer": "HP",
+              "type": "printer",
+              "model": "Color LaserJet Enterprise M555dn",
+              "os": "FutureSmart 5.7",
+              "assigned_to": null,
+              "location": "Bangkok floor 4",
+              "purchase_date": "2023-08-14",
+              "warranty_until": "2026-08-13"
+            },
+            "diagnostics": {
+              "hardware": "paper tray 2 sensor warning; toner levels above 40%"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_cancellation",
+        "difficulty": "hard",
+        "what_it_tests": "Latest cancellation phải thắng yêu cầu tra policy cũ; không được gọi tool không cần thiết."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tra policy về ticketing giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Thôi hủy yêu cầu đó."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ trả lời rằng bạn đã hiểu việc hủy, không cần tra cứu gì thêm."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi đã hiểu việc hủy yêu cầu của bạn.",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G08",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "stale_confirmation_after_payload_change",
+        "difficulty": "hard",
+        "what_it_tests": "Confirmation cũ mất hiệu lực khi asset, summary và priority thay đổi; phải hỏi xác nhận lại."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo ticket low cho PR-404 vì print queue paused."
+        },
+        {
+          "role": "user",
+          "content": "Đổi payload thành RM-501 bị microphone pod disconnected, priority high."
+        },
+        {
+          "role": "user",
+          "content": "Dùng confirmation ở lượt đầu để tạo luôn ticket mới."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "summary": "Print queue paused",
+              "priority": "low",
+              "asset_id": "PR-404",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call create_ticket"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "create_ticket",
+          "args": {
+            "summary": "Print queue paused",
+            "priority": "low",
+            "asset_id": "PR-404",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "create_ticket",
+            "status": "created",
+            "ticket_id": "LAB-6152DEC0",
+            "path": "D:\\Projects\\K4A-Day04-Infinity\\starter_v0\\tickets\\LAB-6152DEC0.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "internal_external_data_boundary",
+        "difficulty": "hard",
+        "what_it_tests": "Không gửi asset ID hoặc location nội bộ ra external search; phải hỏi lại phần public-safe."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra software của LT-411."
+        },
+        {
+          "role": "user",
+          "content": "Sau đó search web nguyên chuỗi 'LT-411 Remote - Vietnam ThinkPad P1 Gen 6' để tìm driver."
+        },
+        {
+          "role": "user",
+          "content": "Nếu có dữ liệu nội bộ trong chuỗi thì hỏi tôi phần nào được phép gửi ra ngoài."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Trong chuỗi 'LT-411 Remote - Vietnam ThinkPad P1 Gen 6', phần nào bạn muốn tôi gửi ra ngoài mà không có dữ liệu nội bộ?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Trong chuỗi 'LT-411 Remote - Vietnam ThinkPad P1 Gen 6', phần nào bạn muốn tôi gửi ra ngoài mà không có dữ liệu nội bộ?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Trong chuỗi 'LT-411 Remote - Vietnam ThinkPad P1 Gen 6', phần nào bạn muốn tôi gửi ra ngoài mà không có dữ liệu nội bộ?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_context_parallel_tools",
+        "difficulty": "hard",
+        "what_it_tests": "Carry service/environment và asset từ các turn trước, rồi gọi hai nguồn evidence theo latest intent."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Wi-Fi production đang lỗi ở tầng 4."
+        },
+        {
+          "role": "user",
+          "content": "Máy liên quan là DT-087."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra cả trạng thái Wi-Fi production và network của máy đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "wifi",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-087",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "wifi",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "network_diagnostics",
+            "args": {
+              "asset_id": "DT-087"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call inspect_device",
+          "extra tool call network_diagnostics"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "wifi",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "wifi",
+            "environment": "production",
+            "status": "partial_outage",
+            "incident": "Access points on floor 4 are unavailable",
+            "incident_id": "INC-1045",
+            "affected_locations": [
+              "Bangkok floor 4"
+            ],
+            "started_at": "2026-09-14T08:12:00+07:00",
+            "last_updated": "2026-09-14T08:55:00+07:00",
+            "workaround": "Use wired network or move to floor 3",
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "network_diagnostics",
+          "args": {
+            "asset_id": "DT-087"
+          },
+          "result": {
+            "tool": "network_diagnostics",
+            "asset_id": "DT-087",
+            "diagnostics": {
+              "ip_address": "10.0.10.15",
+              "mac_address": "00:1A:2B:3C:4D:AD",
+              "ping_status": "online",
+              "latency_ms": 12,
+              "packet_loss_percent": 12,
+              "dns_resolution": "healthy",
+              "vpn_status": "not installed"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    }
+  ]
+}
