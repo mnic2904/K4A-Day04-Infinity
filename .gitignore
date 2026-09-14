@@ -18,7 +18,7 @@ starter_v0/tests/
 
 # Local action/scratch output
 /starter_v0/tickets/
-/starter_v0/runs/
+# /starter_v0/runs/
 /starter_v0/transcripts/
 /starter_v0/analysis/
 
