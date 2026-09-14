@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+import json
 from pathlib import Path
 import re
 from typing import Any
@@ -42,6 +43,20 @@ SENSITIVE_INPUT_PATTERNS = (
 def contains_sensitive_input(text: str) -> bool:
     """Return true only when text appears to include a credential value."""
     return any(pattern.search(text) for pattern in SENSITIVE_INPUT_PATTERNS)
+
+
+def split_agent_display(assistant_text: str | None) -> tuple[str, dict[str, Any] | None]:
+    """Return the human-facing reply and, when available, the raw JSON payload."""
+    raw_text = assistant_text or ""
+    try:
+        payload = json.loads(raw_text)
+    except (TypeError, json.JSONDecodeError):
+        return raw_text, None
+
+    reply = payload.get("reply") if isinstance(payload, dict) else None
+    if isinstance(reply, str) and reply.strip():
+        return reply.strip(), payload
+    return raw_text, None
 
 
 def current_settings() -> dict[str, str]:
@@ -189,7 +204,11 @@ def render_turn(turn: dict[str, Any]) -> None:
         if turn["status"] == "provider_error":
             st.error("The provider request failed. No internal error detail was recorded.")
         else:
-            st.text(turn.get("assistant_text") or "")
+            display_text, raw_payload = split_agent_display(turn.get("assistant_text"))
+            st.markdown(display_text)
+            if raw_payload is not None:
+                with st.expander("Raw agent payload"):
+                    st.json(raw_payload)
         st.caption(f"Status: {turn['status']}")
 
         for round_record in turn.get("rounds", []):
