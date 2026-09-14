@@ -1,0 +1,87 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "diagnostics": [
+    {
+      "asset_id": "LT-204",
+      "ip_address": "10.0.12.45",
+      "mac_address": "00:1A:2B:3C:4D:5E",
+      "ping_status": "online",
+      "latency_ms": 24,
+      "dns_resolution": "healthy",
+      "vpn_status": "disconnected (last failed with AUTH_TIMEOUT)"
+    },
+    {
+      "asset_id": "LT-240",
+      "ip_address": "10.0.14.88",
+      "mac_address": "00:1A:2B:3C:4D:6F",
+      "ping_status": "offline",
+      "latency_ms": null,
+      "dns_resolution": "unreachable",
+      "vpn_status": "no recent attempt"
+    },
+    {
+      "asset_id": "DT-031",
+      "ip_address": "10.0.10.10",
+      "mac_address": "00:1A:2B:3C:4D:7A",
+      "ping_status": "online",
+      "latency_ms": 3,
+      "dns_resolution": "healthy",
+      "vpn_status": "not installed"
+    },
+    {
+      "asset_id": "LT-318",
+      "ip_address": "10.0.15.112",
+      "mac_address": "00:1A:2B:3C:4D:8B",
+      "ping_status": "online",
+      "latency_ms": 38,
+      "dns_resolution": "healthy",
+      "vpn_status": "connected"
+    },
+    {
+      "asset_id": "LT-411",
+      "ip_address": "192.168.1.100",
+      "mac_address": "00:1A:2B:3C:4D:9C",
+      "ping_status": "online",
+      "latency_ms": 71,
+      "dns_resolution": "fallback server active",
+      "vpn_status": "connected (tunnel healthy)"
+    },
+    {
+      "asset_id": "DT-087",
+      "ip_address": "10.0.10.15",
+      "mac_address": "00:1A:2B:3C:4D:AD",
+      "ping_status": "online",
+      "latency_ms": 12,
+      "packet_loss_percent": 12,
+      "dns_resolution": "healthy",
+      "vpn_status": "not installed"
+    },
+    {
+      "asset_id": "MB-012",
+      "ip_address": "10.0.18.25",
+      "mac_address": "00:1A:2B:3C:4D:BE",
+      "ping_status": "online",
+      "latency_ms": 45,
+      "dns_resolution": "healthy",
+      "vpn_status": "per-app VPN healthy"
+    },
+    {
+      "asset_id": "PR-404",
+      "ip_address": "10.0.20.5",
+      "mac_address": "00:1A:2B:3C:4D:CF",
+      "ping_status": "offline",
+      "latency_ms": null,
+      "dns_resolution": "unreachable",
+      "vpn_status": "not applicable"
+    },
+    {
+      "asset_id": "RM-501",
+      "ip_address": "10.0.21.10",
+      "mac_address": "00:1A:2B:3C:4D:D0",
+      "ping_status": "online",
+      "latency_ms": 5,
+      "dns_resolution": "healthy",
+      "vpn_status": "not applicable"
+    }
+  ]
+}
